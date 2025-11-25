@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 repositories {
@@ -18,19 +19,35 @@ java {
     }
 }
 
+javafx {
+    version = "21"
+    modules = ['javafx.controls', 'javafx.graphics']
+}
+
 application {
-    mainClass = 'hangman.Hangman'
+    mainClass = 'hangman.console.ConsoleApp'
+    mainModule = 'hangman'
 }
 
 run {
     standardInput = System.in
 }
 
-task runGui(type: JavaExec) {
+task GUI(type: JavaExec) {
     group = 'application'
     description = 'Runs the Hangman GUI application.'
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'hangman.HangmanGUI'
+    mainClass = 'hangman.gui.HangmanGUI'
+    mainModule = 'hangman'
+}
+
+task console(type: JavaExec) {
+    group = 'application'
+    description = 'Runs the Hangman Console application.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'hangman.console.ConsoleApp'
+    mainModule = 'hangman'
+    standardInput = System.in
 }
 
 test {

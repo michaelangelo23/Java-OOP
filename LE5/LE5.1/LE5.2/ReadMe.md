@@ -9,5 +9,5 @@ Tests
 ./gradlew test
 
 Troubleshooting
-if build Fails, try: /gradlew clean
+if build fails, try: /gradlew clean
 if permission denied in Linux, try: chmod +x gradlew
