@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+javafx {
+    version = "23.0.1"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        exceptionFormat "full"
+        showStandardStreams = true
+        showCauses = true
+        showStackTraces = true
+        displayGranularity = 2
+    }
+    
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\n========================================="
+            println "Test Results: ${result.resultType}"
+            println "Tests: ${result.testCount}, Passed: ${result.successfulTestCount}, Failed: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
+            println "========================================="
+        }
+    }
+}
+
+application {
+    mainModule = 'passwordentry'
+    mainClass = 'passwordentry.gui.PasswordGUI'
+    applicationDefaultJvmArgs = [
+        '--enable-native-access=javafx.graphics',
+        '--add-opens=java.base/java.nio=ALL-UNNAMED',
+        '--add-opens=java.desktop/sun.java2d=ALL-UNNAMED'
+    ]
+}
+
+tasks.register('console', JavaExec) {
+    group = 'application'
+    description = 'Runs the console application.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'passwordentry.console.Password'
+    standardInput = System.in
+}
+
+tasks.register('GUI') {
+    dependsOn 'run'
+}
